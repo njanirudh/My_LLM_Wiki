@@ -1,0 +1,58 @@
+services:
+  llama-server:
+    image: docker.io/kyuz0/amd-strix-halo-toolboxes:vulkan-radv
+    container_name: llama-server-vulkan-radv
+
+    stdin_open: true
+    tty: true
+
+    ports:
+      - "8080:8080"
+
+    devices:
+      - /dev/dri:/dev/dri
+
+    group_add:
+      - video
+      - render
+
+    security_opt:
+      - seccomp=unconfined
+
+    volumes:
+      - /usr/share/vulkan:/usr/share/vulkan:ro
+      - /etc/vulkan:/etc/vulkan:ro
+      - /home/aja@phenospex.local/LLMs:/LLMs
+
+    working_dir: /LLMs
+
+    command: >
+      llama-server
+      --host 0.0.0.0
+      --port 8080
+      --models-preset /LLMs/server.ini
+
+    restart: "no"
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+
+    ports:
+      - "3001:8080"
+
+    environment:
+      - OPENAI_API_BASE_URL=http://llama-server:8080/v1
+      - OPENAI_API_KEY=dummy
+      - WEBUI_AUTH=false
+
+    volumes:
+      - open-webui:/app/backend/data
+
+    depends_on:
+      - llama-server
+
+    restart: unless-stopped
+
+volumes:
+  open-webui:

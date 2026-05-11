@@ -1,0 +1,17 @@
+services:
+  llama-server:
+    image: ghcr.io/ggml-org/llama.cpp:server
+    container_name: llama-cpu
+    stdin_open: true
+    tty: true
+
+    ports:
+      - "8080:8080"
+
+    volumes:
+      - /home/aja@phenospex.local/LLMs:/LLMs
+
+    command: >
+      --models-preset /LLMs/server_cpu.ini
+
+    restart: "no"

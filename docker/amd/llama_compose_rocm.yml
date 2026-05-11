@@ -1,0 +1,35 @@
+services:
+  llama-server:
+    image: ghcr.io/ggml-org/llama.cpp:server-rocm
+    container_name: llama-rocm
+    stdin_open: true
+    tty: true
+
+    ports:
+      - "8080:8080"
+
+    devices:
+      - /dev/kfd:/dev/kfd
+      - /dev/dri:/dev/dri
+
+    group_add:
+      - video
+      - render
+
+    security_opt:
+      - seccomp=unconfined
+
+    environment:
+      HSA_OVERRIDE_GFX_VERSION: "11.5.1"
+      HIP_VISIBLE_DEVICES: "0"
+
+    volumes:
+      - /home/aja@phenospex.local/LLMs/:/LLMs
+
+
+    command: >
+      --models-preset /LLMs/server.ini
+      --host 0.0.0.0
+      --port 8080
+
+    restart: "no"
