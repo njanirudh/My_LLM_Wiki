@@ -41,7 +41,15 @@ services:
     command: >
       llama-server
       --models-preset /configs/llama_server/server_vulkan.ini
+      --host 0.0.0.0
+      --port 8080
 
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+        
     restart: "no"
 
   open-webui:
@@ -52,8 +60,10 @@ services:
       - "3001:8080"
 
     environment:
-      OPENAI_API_BASE_URL: http://llama-server:8080/v1
-      OPENAI_API_KEY: dummy
+      ENABLE_OPENAI_API: "true"
+      ENABLE_OLLAMA_API: "false"
+      OPENAI_API_BASE_URL: "http://llama-server:8080/v1"
+      OPENAI_API_KEY: "dummy"
       WEBUI_AUTH: "false"
 
     volumes:
