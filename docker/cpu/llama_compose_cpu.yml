@@ -9,7 +9,7 @@ services:
       - "8080:8080"
 
     volumes:
-      - /home/aja@phenospex.local/LLMs:/LLMs
+      - ${HOME}/LLMs:/LLMs
 
     command: >
       --models-preset /LLMs/server_cpu.ini
