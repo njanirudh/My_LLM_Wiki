@@ -2,16 +2,35 @@ services:
   llama-server:
     image: ghcr.io/ggml-org/llama.cpp:server
     container_name: llama-cpu
+
     stdin_open: true
     tty: true
 
     ports:
       - "8080:8080"
 
+    # Better shared-memory behavior for large prompts / batching
+    ipc: host
+
+    # Allows --mlock in server_cpu.ini to work properly
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+    # Optional but useful for CPU inference stability
+    environment:
+      OMP_NUM_THREADS: "8"
+      OPENBLAS_NUM_THREADS: "8"
+      MKL_NUM_THREADS: "8"
+
     volumes:
       - ${HOME}/LLMs:/LLMs
+      - ${HOME}/LLMs/My_LLM_Wiki/configs:/configs:ro
+
+    working_dir: /LLMs
 
     command: >
-      --models-preset /LLMs/server_cpu.ini
+      --models-preset /configs/llama_server/server_cpu.ini
 
     restart: "no"
