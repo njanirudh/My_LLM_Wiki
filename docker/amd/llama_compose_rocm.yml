@@ -24,8 +24,7 @@ services:
       HIP_VISIBLE_DEVICES: "0"
 
     volumes:
-      - /home/aja@phenospex.local/LLMs/:/LLMs
-
+      - ${HOME}/LLMs:/LLMs
 
     command: >
       --models-preset /LLMs/server.ini

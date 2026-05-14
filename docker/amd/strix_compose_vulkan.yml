@@ -22,7 +22,7 @@ services:
     volumes:
       - /usr/share/vulkan:/usr/share/vulkan:ro
       - /etc/vulkan:/etc/vulkan:ro
-      - /home/aja@phenospex.local/LLMs:/LLMs
+      - ${HOME}/LLMs:/LLMs
 
     working_dir: /LLMs
 
