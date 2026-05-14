@@ -25,9 +25,10 @@ services:
 
     volumes:
       - ${HOME}/LLMs:/LLMs
+      - ${HOME}/LLMs/My_LLM_Wiki/configs:/configs:ro
 
     command: >
-      --models-preset /LLMs/server.ini
+      --models-preset /configs/llama_server/server_rocm.ini
       --host 0.0.0.0
       --port 8080
 

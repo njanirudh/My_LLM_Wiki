@@ -15,8 +15,13 @@ services:
       - /usr/share/vulkan:/usr/share/vulkan:ro
       - /etc/vulkan:/etc/vulkan:ro
       - ${HOME}/LLMs:/LLMs
+      - ${HOME}/LLMs/My_LLM_Wiki/configs:/configs:ro
+
+    environment:
+      GGML_VULKAN_DEVICE: "0"
+      VK_ICD_FILENAMES: /usr/share/vulkan/icd.d/radeon_icd.x86_64.json
 
     command: >
-      --models-preset /LLMs/server.ini
+      --models-preset /configs/llama_server/server_vulkan.ini
 
     restart: "no"

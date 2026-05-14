@@ -19,18 +19,28 @@ services:
     security_opt:
       - seccomp=unconfined
 
+    ipc: host
+
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+    environment:
+      GGML_VULKAN_DEVICE: "0"
+      VK_ICD_FILENAMES: /usr/share/vulkan/icd.d/radeon_icd.x86_64.json
+
     volumes:
       - /usr/share/vulkan:/usr/share/vulkan:ro
       - /etc/vulkan:/etc/vulkan:ro
       - ${HOME}/LLMs:/LLMs
+      - ${HOME}/LLMs/My_LLM_Wiki/configs:/configs:ro
 
     working_dir: /LLMs
 
     command: >
       llama-server
-      --host 0.0.0.0
-      --port 8080
-      --models-preset /LLMs/server.ini
+      --models-preset /configs/llama_server/server_vulkan.ini
 
     restart: "no"
 
@@ -42,9 +52,9 @@ services:
       - "3001:8080"
 
     environment:
-      - OPENAI_API_BASE_URL=http://llama-server:8080/v1
-      - OPENAI_API_KEY=dummy
-      - WEBUI_AUTH=false
+      OPENAI_API_BASE_URL: http://llama-server:8080/v1
+      OPENAI_API_KEY: dummy
+      WEBUI_AUTH: "false"
 
     volumes:
       - open-webui:/app/backend/data
