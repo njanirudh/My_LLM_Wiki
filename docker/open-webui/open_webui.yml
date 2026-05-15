@@ -16,17 +16,36 @@ services:
       OPENAI_API_KEY: "dummy"
 
       ENABLE_RAG: "true"
+      ENABLE_RAG_LOCAL_WEB_FETCH: "true"
+      RAG_EMBEDDING_ENGINE: "sentence_transformers"
+      RAG_EMBEDDING_MODEL: "sentence-transformers/all-MiniLM-L6-v2"
+      CHUNK_SIZE: "1200"
+      CHUNK_OVERLAP: "150"
+      PDF_EXTRACT_IMAGES: "true"
 
+      # Web search
       ENABLE_WEB_SEARCH: "true"
       WEB_SEARCH_ENGINE: "duckduckgo"
+      ENABLE_RAG_WEB_SEARCH: "true"
+      RAG_WEB_SEARCH_RESULT_COUNT: "5"
+      RAG_WEB_SEARCH_CONCURRENT_REQUESTS: "5"
 
+      # Tools / functions
       ENABLE_FUNCTION_CALLING: "true"
+      ENABLE_CODE_EXECUTION: "true"
+      CODE_EXECUTION_ENGINE: "jupyter"
 
     volumes:
       - open-webui:/app/backend/data
     
     networks:
       - llm-net
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
     restart: unless-stopped
 
