@@ -10,7 +10,8 @@ services:
       - "8080:8080"
 
     devices:
-      - /dev/dri:/dev/dri
+      - /dev/dri/renderD128:/dev/dri/renderD128
+      - /dev/dri/card1:/dev/dri/card1
 
     group_add:
       - video
@@ -26,9 +27,9 @@ services:
         soft: -1
         hard: -1
 
-    environment:
-      GGML_VULKAN_DEVICE: "0"
-      VK_ICD_FILENAMES: /usr/share/vulkan/icd.d/radeon_icd.x86_64.json
+    # environment:
+    #   GGML_VULKAN_DEVICE: "0"
+    #   VK_ICD_FILENAMES: /usr/share/vulkan/icd.d/radeon_icd.x86_64.json
 
     volumes:
       - /usr/share/vulkan:/usr/share/vulkan:ro
@@ -49,30 +50,12 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
-        
+    
+    networks:
+      - llm-net
+
     restart: "no"
 
-  open-webui:
-    image: ghcr.io/open-webui/open-webui:main
-    container_name: open-webui
-
-    ports:
-      - "3001:8080"
-
-    environment:
-      ENABLE_OPENAI_API: "true"
-      ENABLE_OLLAMA_API: "false"
-      OPENAI_API_BASE_URL: "http://llama-server:8080/v1"
-      OPENAI_API_KEY: "dummy"
-      WEBUI_AUTH: "false"
-
-    volumes:
-      - open-webui:/app/backend/data
-
-    depends_on:
-      - llama-server
-
-    restart: unless-stopped
-
-volumes:
-  open-webui:
+networks:
+  llm-net:
+    name: llm-net
