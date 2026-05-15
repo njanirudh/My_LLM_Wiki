@@ -58,4 +58,4 @@ services:
 
 networks:
   llm-net:
-    name: llm-net
+    external: true
