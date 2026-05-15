@@ -22,10 +22,6 @@ services:
 
     ipc: host
 
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
 
     # environment:
     #   GGML_VULKAN_DEVICE: "0"
@@ -59,3 +55,4 @@ services:
 networks:
   llm-net:
     external: true
+    name: llm-net
