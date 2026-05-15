@@ -1,0 +1,10 @@
+name: office-llm-stack
+
+include:
+  - ./amd/strix_compose_vulkan.yml
+  - ./open-webui/open_webui.yml
+
+networks:
+  llm-net:
+    external: true
+    name: llm-net

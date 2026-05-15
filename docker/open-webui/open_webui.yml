@@ -49,9 +49,6 @@ services:
 
     restart: unless-stopped
 
-volumes:
-  open-webui:
-
 networks:
   llm-net:
-    name: llm-net
+    external: true
