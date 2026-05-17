@@ -1,0 +1,26 @@
+services:
+  llama-server:
+    image: ghcr.io/ggml-org/llama.cpp:server-intel
+    container_name: llama-intel
+
+    stdin_open: true
+    tty: true
+
+    ports:
+      - "8080:8080"
+
+    devices:
+      - /dev/dri/renderD128
+      - /dev/dri/card1
+
+    volumes:
+      # models
+      - /home/njanirudh/LLMs/Models:/models
+
+      # server config
+      - ./server.ini:/app/server.ini
+
+    command: >
+      --models-preset /app/server-intel.ini
+
+    restart: "no"
