@@ -1,0 +1,10 @@
+name: office-llm-stack
+
+include:
+  - ./intel/llama_compose_intel.yml
+  - ./open-webui/open_webui.yml
+
+networks:
+  llm-net:
+    external: true
+    name: llm-net
